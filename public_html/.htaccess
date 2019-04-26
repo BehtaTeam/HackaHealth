@@ -1,0 +1,19 @@
+# Turning on the rewrite engine is necessary for the following rules and features.
+# FollowSymLinks must be enabled for this to work.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+</IfModule>
+
+# Unless an explicit file or directory exists, redirect all request to Yii entry script
+<IfModule mod_rewrite.c>
+  RewriteCond %{REQUEST_FILENAME} !-l
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . index.php [l,NC,QSA]
+</IfModule>
+
+#<IfModule mod_rewrite.c>
+# RewriteBase /
+ #RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+ #RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+#</IfModule>

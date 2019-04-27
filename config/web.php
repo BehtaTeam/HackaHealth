@@ -12,7 +12,7 @@ $config = [
 	'components' => [
 		'request'      => [
 			// !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-			'cookieValidationKey' => '34sdsdf33',
+			'cookieValidationKey' => '34sdggsdf33',
 		],
 		'cache'        => [
 			'class' => 'yii\caching\FileCache',
@@ -69,7 +69,7 @@ if (YII_ENV_DEV) {
 	$config['bootstrap'][]    = 'gii';
 	$config['modules']['gii'] = [
 		'class'      => 'yii\gii\Module',
-		'allowedIPs' => ['127.0.0.1', '5.52.53.84', '93.110.69.44'] // adjust this to your needs
+		'allowedIPs' => ['127.0.0.1', '5.52.53.84','89.187.177.113'] // adjust this to your needs
 	];
 }
 

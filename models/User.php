@@ -12,6 +12,7 @@ use Yii;
  * @property string  $password
  * @property string  $email
  * @property integer $register_date
+ * @property string  $phone_number
  * @property integer $picture_id
  * @property integer $age
  * @property integer $gender
@@ -23,12 +24,14 @@ use Yii;
  * @property integer $emergency_number_enabled
  * @property integer $pollution_notif_alert
  * @property string  $api_token
+ * @property integer $helper_enabled
  * @property string  $first_name
  * @property string  $last_name
  * @property integer $healthy_notif
  */
 class User extends \yii\db\ActiveRecord
 {
+	
 	/**
 	 * @inheritdoc
 	 */
@@ -44,10 +47,11 @@ class User extends \yii\db\ActiveRecord
 	{
 		return [
 			[['register_date', 'age', 'confidence_number'], 'required'],
-			[['register_date', 'picture_id', 'age', 'gender', 'height', 'weight', 'status', 'confidence_number_enabled', 'emergency_number_enabled', 'pollution_notif_alert', 'healthy_notif'], 'integer'],
+			[['register_date', 'picture_id', 'age', 'gender', 'height', 'weight', 'status', 'confidence_number_enabled', 'emergency_number_enabled', 'pollution_notif_alert', 'healthy_notif', 'helper_enabled'], 'integer'],
 			[['username'], 'string', 'max' => 150],
 			[['password'], 'string', 'max' => 255],
 			[['email'], 'string', 'max' => 254],
+			[['phone_number'], 'string', 'max' => 20],
 			[['confidence_number'], 'string', 'max' => 15],
 			[['api_token'], 'string', 'max' => 40],
 			[['first_name', 'last_name'], 'string', 'max' => 256],
@@ -80,6 +84,8 @@ class User extends \yii\db\ActiveRecord
 			'first_name'                => 'نام',
 			'last_name'                 => 'نام خانوادگی',
 			'healthy_notif'             => 'اعلان های آموزشی سلامت فعال است؟',
+			'helper_enabled'            => 'سیستم همیار داوطلب فعال است؟',
+			'phone_number'              => 'شماره تماس کاربر',
 		];
 	}
 }

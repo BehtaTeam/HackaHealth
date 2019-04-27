@@ -30,11 +30,10 @@ class UserController extends Controller
 	{
 		$request = Yii::$app->request;
 		
-		$telegram_id   = $request->post('telegram_id', '');
+		$id            = $request->post('id', '');
 		$username      = $request->post('username', '');
 		$first_name    = $request->post('first_name', '');
 		$last_name     = $request->post('last_name', '');
-		$phone         = $request->post('phone', '');
 		$device_id     = $request->post('device_id', '');
 		$serial_number = $request->post('serial_number', '');
 		$model         = $request->post('model', '');
@@ -44,10 +43,10 @@ class UserController extends Controller
 		$app_version   = $request->post('app_version', '');
 		$agent         = $request->post('agent', '');
 		
-		$string = (string)(1000000000000000 + $telegram_id + $api_version);
+		$string = (string)(1000000000000000 + $id + $api_version);
 		Secure::Authorize($agent, $string);
 		
-		$result = UserManage::register($telegram_id, $username, $first_name, $last_name, $phone,
+		$result = UserManage::register($id, $username, $first_name, $last_name, $phone,
 			$device_id, $serial_number, $model, $manufacture, $brand,
 			$api_version, $app_version);
 		
@@ -85,24 +84,6 @@ class UserController extends Controller
 		Result::success($result);
 	}
 	
-	public function actionChannels()
-	{
-		$request = Yii::$app->request;
-		
-		$telegram_id = $request->post('telegram_id', '');
-		$at          = $request->post('at', '');
-		$page_number = $request->post('page_number', '');
-		$per_page    = $request->post('per_page', '');
-		$agent       = $request->post('agent', '');
-		
-		$string = (string)(1000000000000000 + $telegram_id);
-		Secure::Authorize($agent, $string);
-		
-		$result = UserManage::userChannels($telegram_id, $at, $page_number, $per_page);
-		
-		Result::success($result);
-	}
-	
 	public function actionTest()
 	{
 		$m = new MCrypt();
@@ -110,14 +91,12 @@ class UserController extends Controller
 		
 	}
 	
-	public function actionCoinLogList()
+	public function actionGetData()
 	{
-		$telegram_id  = $_POST['telegram_id'];
-		$access_token = $_POST['access_token'];
-		$page_number  = $_POST['page_number'];
-		$per_page     = $_POST['per_page'];
+		$user_id = $_GET['user_id'];
+		$token = $_GET['token'];
 		
-		$result = CoinLog::getList($telegram_id, $access_token, $page_number, $per_page);
+		$result = UserManage::getData($user_id, $token);
 		
 		Result::success($result);
 	}

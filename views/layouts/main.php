@@ -73,6 +73,10 @@ $base         = \Yii::$app->homeUrl;
                     <a href="<?= $base . 'area/index' ?>"><i class="fa fa-location-arrow"></i> <span class="nav-label">مدیریت ناحیه ها</span></a>
                 </li>
 
+                <li>
+                    <a href="<?= $base . 'center/index' ?>"><i class="fa fa-home"></i> <span class="nav-label">مدیریت مراکز</span></a>
+                </li>
+
             </ul>
         </div>
     </nav>

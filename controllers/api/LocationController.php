@@ -26,10 +26,12 @@ class LocationController extends Controller
 	{
 		$request = Yii::$app->request;
 		
-		$start = $request->get('start');
-		$end   = $request->get('end');
+		$start_lat  = $_GET['start_lat'];
+		$start_long = $_GET['start_long'];
+		$end_lat    = $_GET['end_lat'];
+		$end_long   = $_GET['end_long'];
 		
-		$result = LocationManager::location($start, $end);
+		$result = LocationManager::location($start_lat, $start_long, $end_lat, $end_long);
 		
 		Result::success($result);
 	}
@@ -99,6 +101,14 @@ class LocationController extends Controller
 		$result = LocationManager::getAreas();
 		
 		Result::success($result);
+	}
+	
+	public function actionSetRandoms()
+	{
+		foreach (Area::find()->all() as $area) {
+			$area->pollute = rand(0, 300);
+			$area->save();
+		}
 	}
 	
 }

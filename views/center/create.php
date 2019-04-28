@@ -4,13 +4,13 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Bot */
+/* @var $model app\models\Center */
 
-$this->title                   = 'ایجاد بات جدید';
-$this->params['breadcrumbs'][] = ['label' => 'مدیریت بات ها', 'url' => ['index']];
+$this->title                   = 'ایجاد مرکز';
+$this->params['breadcrumbs'][] = ['label' => 'مراکز', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="bot-create">
+<div class="center-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 	

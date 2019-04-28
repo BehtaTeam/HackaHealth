@@ -4,6 +4,7 @@ namespace app\components;
 
 
 use app\models\Area;
+use app\models\Center;
 use app\models\ErrorLog;
 use app\models\HeartRate;
 use app\models\Notification;
@@ -29,7 +30,7 @@ class LocationManager
 		$content3 = LocationManager::googleRequest($start_lat . ',' . $start_long, $end_lat . ',' . $end_long, ((($end_lat - $start_lat) / 2) + $start_lat) . ',' . $start_long);
 		
 		
-		$legs   = [];
+		$legs = [];
 		
 		foreach ($content1->routes[0]->legs as $leg) {
 			$legs[] = $leg;
@@ -42,10 +43,10 @@ class LocationManager
 		foreach ($content3->routes[0]->legs as $leg) {
 			$legs[] = $leg;
 		}
-/*
-		$result['legs'] = $legs;
-		
-		return $result;*/
+		/*
+				$result['legs'] = $legs;
+				
+				return $result;*/
 		
 		$step_groups = [];
 		foreach ($legs as $id => $leg) {
@@ -72,7 +73,7 @@ class LocationManager
 				$average       = array_sum($averager[$id]) / count($averager[$id]);
 			}
 			
-			$step_groups[$id]['average'] = $average;
+			$step_groups[$id]['average'] = (int)$average;
 			
 			if ($average < 51) {
 				$pollute_status = 'مناسب برای همه';
@@ -157,6 +158,25 @@ class LocationManager
 		$result['list'] = $list;
 		
 		return $result;
+	}
+	
+	public static function nearestCenter($lat, $long, $token)
+	{
+		$qstring = "(POW(('center.long'-$long),2) + POW(('center.lat'-$lat),1))";
+		//$center = Center::find()->orderBy($qstring)->one();
+		
+		//$center = Center::findOne(['orderBy' => $qstring]);
+		$center = Center::findBySql('SELECT * FROM `center` ORDER BY ' . $qstring)->one();
+		
+		$result['center']['id']          = $center->id;
+		$result['center']['lat']         = $center->lat;
+		$result['center']['long']        = $center->long;
+		$result['center']['title']       = $center->title;
+		$result['center']['description'] = $center->description;
+		$result['center']['type']        = $center->type;
+		
+		return $result;
+		
 	}
 	
 }

@@ -7,6 +7,7 @@ use app\models\Area;
 use app\models\Center;
 use app\models\ErrorLog;
 use app\models\HeartRate;
+use app\models\Helper;
 use app\models\Notification;
 use app\models\User;
 
@@ -21,38 +22,53 @@ class LocationManager
 		$end_long   = (double)$end_long;
 		
 		// First Request To Google For The First And the Main Route
-		$content1 = LocationManager::googleRequest($start_lat . ',' . $start_long, $start_lat . ',' . $end_long, null);
+		$content1 = LocationManager::googleRequest($start_lat . ',' . $start_long, $end_lat . ',' . $end_long, null);
 		usleep(500);
 		
 		// Other Requests
-		$content2 = LocationManager::googleRequest($start_lat . ',' . $start_long, $start_lat . ',' . $end_long, $start_lat . ',' . ((($end_long - $start_long) / 2) + $start_long));
+		$content2 = LocationManager::googleRequest($start_lat . ',' . $start_long, $end_lat . ',' . $end_long, $start_lat . ',' . ((($end_long - $start_long) / 2) + $start_long));
 		usleep(500);
 		$content3 = LocationManager::googleRequest($start_lat . ',' . $start_long, $end_lat . ',' . $end_long, ((($end_lat - $start_lat) / 2) + $start_lat) . ',' . $start_long);
 		
+		$route_list = [];
 		
-		$legs = [];
-		
-		foreach ($content1->routes[0]->legs as $leg) {
-			$legs[] = $leg;
+		foreach ($content1->routes as $route) {
+			$legs = [];
+			foreach ($route->legs as $leg) {
+				$legs[] = $leg;
+			}
+			
+			$route_list[] = LocationManager::stepMaker($legs);
 		}
 		
-		foreach ($content2->routes[0]->legs as $leg) {
-			$legs[] = $leg;
-		}
-		
-		foreach ($content3->routes[0]->legs as $leg) {
-			$legs[] = $leg;
-		}
-		/*
-				$result['legs'] = $legs;
+		foreach ($content2->routes as $route) {
+				$legs = [];
+				foreach ($route->legs as $leg) {
+					$legs[] = $leg;
+				}
 				
-				return $result;*/
+				$route_list[] = LocationManager::stepMaker($legs);
+			}
+			
+			foreach ($content3->routes as $route) {
+				$legs = [];
+				foreach ($route->legs as $leg) {
+					$legs[] = $leg;
+				}
+				
+				$route_list[] = LocationManager::stepMaker($legs);
+			}
 		
+		$result['routes'] = $route_list;
+		
+		return $result;
+	}
+	
+	public static function stepMaker($legs)
+	{
 		$step_groups = [];
 		foreach ($legs as $id => $leg) {
 			$steps = $leg->steps;
-			
-			//$step_groups["id-" . $id] = $steps;
 			
 			$end_locations = [];
 			foreach ($steps as $step_id => $step) {
@@ -73,7 +89,11 @@ class LocationManager
 				$average       = array_sum($averager[$id]) / count($averager[$id]);
 			}
 			
-			$step_groups[$id]['average'] = (int)$average;
+			$step_groups[$id]['average']        = (int)$average;
+			$step_groups[$id]['distance']       = $leg->distance;
+			$step_groups[$id]['duration']       = $leg->duration;
+			$step_groups[$id]['start_location'] = $leg->start_location;
+			$step_groups[$id]['end_location']   = $leg->end_location;
 			
 			if ($average < 51) {
 				$pollute_status = 'مناسب برای همه';
@@ -93,20 +113,17 @@ class LocationManager
 			$step_groups[$id]['steps']          = $steps;
 		}
 		
-		$result['routes'] = $step_groups;
-		
-		return $result;
+		return $step_groups;
 	}
 	
 	public static function googleRequest($start, $end, $waypoints)
 	{
 		$options = [
-			'origin'       => $start,
-			'destination'  => $end,
-			'key'          => 'AIzaSyAiVFF15gsPcTaYOv7kS_gYC1xmRzgSCCY',
-			'mode'         => 'Driving',
-			'waypoints'    => $waypoints,
-			'alternatives' => true,
+			'origin'      => $start,
+			'destination' => $end,
+			'key'         => 'AIzaSyAiVFF15gsPcTaYOv7kS_gYC1xmRzgSCCY',
+			'mode'        => 'Driving',
+			'waypoints'   => $waypoints,
 		];
 		
 		$str = '';
@@ -117,7 +134,7 @@ class LocationManager
 			}
 		}
 		
-		$content = file_get_contents("https://maps.googleapis.com/maps/api/directions/json?" . $str);
+		$content = file_get_contents("https://maps.googleapis.com/maps/api/directions/json?alternatives=true&" . $str);
 		
 		return json_decode($content);
 	}
@@ -174,6 +191,26 @@ class LocationManager
 		$result['center']['title']       = $center->title;
 		$result['center']['description'] = $center->description;
 		$result['center']['type']        = $center->type;
+		
+		return $result;
+		
+	}
+	
+	public static function nearestHelper($lat, $long, $token)
+	{
+		$qstring = "(POW(('helper.long'-$long),2) + POW(('helper.lat'-$lat),1)) DESC";
+		//$center = Center::find()->orderBy($qstring)->one();
+		
+		//$center = Center::findOne(['orderBy' => $qstring]);
+		$helper = Helper::findBySql('SELECT * FROM `helper` where on_call=1 ORDER BY ' . $qstring)->one();
+		
+		$result['helper']['id']         = $helper->id;
+		$result['helper']['lat']        = $helper->lat;
+		$result['helper']['long']       = $helper->long;
+		$result['helper']['email']      = $helper->email;
+		$result['helper']['first_name'] = $helper->first_name;
+		$result['helper']['last_name']  = $helper->last_name;
+		$result['helper']['gender']     = $helper->gender;
 		
 		return $result;
 		

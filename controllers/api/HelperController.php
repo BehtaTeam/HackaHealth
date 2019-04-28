@@ -24,13 +24,24 @@ class HelperController extends Controller
 	
 	public function actionGetNearestCenter()
 	{
-		$request = Yii::$app->request;
 		
 		$lat   = $_GET['lat'];
 		$long  = $_GET['long'];
 		$token = $_GET['token'];
 		
 		$result = LocationManager::nearestCenter($lat, $long, $token);
+		
+		Result::success($result);
+	}
+	
+	public function actionGetNearestHelper()
+	{
+		
+		$lat   = $_GET['lat'];
+		$long  = $_GET['long'];
+		$token = $_GET['token'];
+		
+		$result = LocationManager::nearestHelper($lat, $long, $token);
 		
 		Result::success($result);
 	}

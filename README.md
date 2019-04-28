@@ -1,8 +1,8 @@
-Yii 2 Basic Project Template
+پروژه بک اند رهیاب سلامت
 ============================
 
-Yii 2 Basic Project Template is a skeleton [Yii 2](http://www.yiiframework.com/) application best for
-rapidly creating small projects.
+ساختار این پروژه بر مبنای فریم ورک Yii2 طراحی شده است که مبتنی بر معماری MVC می باشد.
+ [Yii 2](http://www.yiiframework.com/) 
 
 The template contains the basic features including user login/logout and a contact page.
 It includes all commonly used configurations that would allow you to focus on adding new

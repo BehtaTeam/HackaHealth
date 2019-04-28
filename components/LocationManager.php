@@ -108,13 +108,20 @@ class LocationManager
 				
 				$end_locations[$step_id] = $end_location;
 				
-				$lat                              = $end_location->lat;
-				$long                             = $end_location->lng;
-				$area                             = Area::find()->where('lat1>' . $lat)->andWhere('lat4<' . $lat)->andWhere('long2>' . $long)->andWhere('long1<' . $long)->one();
-				$end_locations[$step_id]->area_id = $area->id;
-				$end_locations[$step_id]->pollute = $area->pollute;
-				
-				$averager[$id][$step_id] = $area->pollute;
+				$lat  = $end_location->lat;
+				$long = $end_location->lng;
+				$area = Area::find()->where('lat1>' . $lat)->andWhere('lat4<' . $lat)->andWhere('long2>' . $long)->andWhere('long1<' . $long)->one();
+				if ($area) {
+					$end_locations[$step_id]->area_id = $area->id;
+					$end_locations[$step_id]->pollute = $area->pollute;
+					
+					$averager[$id][$step_id] = $area->pollute;
+				} else {
+					$end_locations[$step_id]->area_id = 0;
+					$end_locations[$step_id]->pollute = 10;
+					
+					$averager[$id][$step_id] = 10;
+				}
 			}
 			if (count($averager[$id])) {
 				$averager[$id] = array_filter($averager[$id]);

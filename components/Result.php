@@ -15,6 +15,7 @@ class Result
 	
 	public static function r403()
 	{
+		header('HTTP/1.1 403 Forbidden');
 		$result = ['data' => ['value' => 'zero'], 'status' => 403, 'message' => Result::ERROR403];
 		Secure::Pack($result);
 	}

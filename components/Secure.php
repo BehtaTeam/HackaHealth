@@ -11,8 +11,8 @@ class Secure
 	{
 		echo json_encode($data);
 		exit;
-		echo msgpack_pack($data);
-		exit;
+		/*echo msgpack_pack($data);
+		exit;*/
 	}
 	
 	/* @var User $user */

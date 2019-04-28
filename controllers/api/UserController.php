@@ -94,11 +94,33 @@ class UserController extends Controller
 	public function actionGetData()
 	{
 		$user_id = $_GET['user_id'];
-		$token = $_GET['token'];
+		$token   = $_GET['token'];
 		
 		$result = UserManage::getData($user_id, $token);
 		
 		Result::success($result);
+	}
+	
+	public function actionSetHeartRate()
+	{
+		$token = $_POST['token'];
+		$rate  = $_POST['rate'];
+		
+		$result = UserManage::setHeartRate($token, $rate);
+		
+		Result::success($result);
+		
+	}
+	
+	public function actionGetHeartRate()
+	{
+		$token  = $_GET['token'];
+		$number = $_GET['number'];
+		
+		$result = UserManage::getHeartRate($token, $number);
+		
+		Result::success($result);
+		
 	}
 	
 }

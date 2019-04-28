@@ -3,10 +3,7 @@
 namespace app\components;
 
 
-use app\models\Areas;
-use app\models\Bot;
-use app\models\Channel;
-use app\models\CoinLog;
+use app\models\Area;
 use app\models\ErrorLog;
 use app\models\HeartRate;
 use app\models\Notification;
@@ -44,7 +41,7 @@ class LocationManager
 	public static function getAreas()
 	{
 		$list = [];
-		foreach (Areas::find()->orderBy('id ASC')->all() as $area) {
+		foreach (Area::find()->orderBy('id ASC')->all() as $area) {
 			$item['id']    = (int)$area->id;
 			$item['lat1']  = $area->lat1;
 			$item['long1'] = $area->long1;

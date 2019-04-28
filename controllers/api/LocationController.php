@@ -7,7 +7,7 @@ use app\components\MCrypt;
 use app\components\Result;
 use app\components\Secure;
 use app\components\UserManage;
-use app\models\Areas;
+use app\models\Area;
 use Yii;
 use yii\web\Controller;
 
@@ -36,7 +36,7 @@ class LocationController extends Controller
 	
 	public function actionPopulate()
 	{
-		$first = Areas::findOne(['id' => 21]);
+		$first = Area::findOne(['id' => 21]);
 		
 		$lat1  = $first->lat1;
 		$long1 = $first->long1;
@@ -51,7 +51,7 @@ class LocationController extends Controller
 		$long_dist = 0.0683105;
 		
 		for ($i = 1; $i < 5; $i++) {
-			$area        = new Areas();
+			$area        = new Area();
 			$area->lat1  = $lat1;
 			$area->long1 = $long1 + ($i * $long_dist);
 			$area->lat2  = $lat1;
@@ -69,8 +69,8 @@ class LocationController extends Controller
 	public function actionNewRow()
 	{
 		
-		$first  = Areas::findOne(['id' => 11]);
-		$second = Areas::findOne(['id' => 16]);
+		$first  = Area::findOne(['id' => 11]);
+		$second = Area::findOne(['id' => 16]);
 		
 		$lat1  = 2 * $second->lat1 - $first->lat1;
 		$long1 = 2 * $second->long1 - $first->long1;
@@ -81,7 +81,7 @@ class LocationController extends Controller
 		$lat4  = 2 * $second->lat4 - $first->lat4;
 		$long4 = 2 * $second->long4 - $first->long4;
 		
-		$area        = new Areas();
+		$area        = new Area();
 		$area->lat1  = $lat1;
 		$area->long1 = $long1;
 		$area->lat2  = $lat2;

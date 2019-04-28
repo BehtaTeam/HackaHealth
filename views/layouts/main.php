@@ -60,7 +60,7 @@ $base         = \Yii::$app->homeUrl;
                         </a>
                     </div>
                     <div class="logo-element">
-                        تله تبادل
+                        رهیاب سلامت
                     </div>
 
                 </li>
@@ -68,59 +68,10 @@ $base         = \Yii::$app->homeUrl;
                 <li>
                     <a href="<?= $base . 'index' ?>"><i class="fa fa-home"></i> <span class="nav-label">صفحه اصلی</span></a>
                 </li>
-				
-				<?php if (!Yii::$app->user->isGuest AND Yii::$app->user->identity->type == 10) : ?>
-                    <li>
-                        <a href="<?= $base . 'bot/index' ?>"><i class="fa fa-android"></i> <span
-                                    class="nav-label">مدیریت بات ها</span></a>
-                    </li>
 
-                    <li>
-                        <a href="<?= $base . 'user/index' ?>"><i class="fa fa-users"></i> <span
-                                    class="nav-label">مدیریت کاربران</span></a>
-                    </li>
-
-                    <li>
-                        <a href="<?= $base . 'channel-violation/index' ?>"><i class="fa fa-warning"></i> <span
-                                    class="nav-label">بررسی گزارش ها</span></a>
-                    </li>
-
-                    <li>
-                        <a href="<?= $base . 'exchange/index' ?>"><i class="fa fa-exchange"></i> <span
-                                    class="nav-label">تبادل ها</span></a>
-                    </li>
-
-                    <li>
-                        <a href="<?= $base . 'exchange-detail/index' ?>"><i class="fa fa-exchange"></i> <span
-                                    class="nav-label">جزئیات تبادل ها</span></a>
-                    </li>
-
-                    <li>
-                        <a href="<?= $base . 'store-log/index' ?>"><i class="fa fa-money"></i> <span
-                                    class="nav-label">خریدهای کاربران</span></a>
-                    </li>
-
-                    <li>
-                        <a href="<?= $base . 'channel/index' ?>"><i class="fa fa-users"></i> <span
-                                    class="nav-label">مدیریت کانال ها</span></a>
-                    </li>
-
-                    <li>
-                        <a href="<?= $base . 'special-exchange/index' ?>"><i class="fa fa-gift"></i> <span
-                                    class="nav-label">درخواست های ویژه</span></a>
-                    </li>
-
-                    <li>
-
-                        <a href="#"><i class="fa fa-gear"></i> <span class="nav-label">مدیریت تنظیمات</span>
-                            <span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li><a href="<?= $base . 'option/index?group_id=0' ?>">تنظیمات اصلی</a></li>
-                            <li><a href="<?= $base . 'option/index?group_id=1' ?>">تنظیمات سکه ها</a></li>
-                            <li><a href="<?= $base . 'option/index?group_id=2' ?>">تنظیمات درخواست ها</a></li>
-                        </ul>
-                    </li>
-				<?php endif; ?>
+                <li>
+                    <a href="<?= $base . 'area/index' ?>"><i class="fa fa-location-arrow"></i> <span class="nav-label">مدیریت ناحیه ها</span></a>
+                </li>
 
             </ul>
         </div>
@@ -136,12 +87,12 @@ $base         = \Yii::$app->homeUrl;
 
                 <ul class="nav navbar-top-links navbar-right" style="margin-top: 20px;">
                     <li>
-                        <span class="m-r-sm text-muted welcome-message">به پنل مدیریت تله تبادل خوش آمدید</span>
+                        <span class="m-r-sm text-muted welcome-message">به پنل مدیریت رهیاب سلامت خوش آمدید</span>
                     </li>
                 </ul>
 
                 <ul class="nav navbar-top-links navbar-left">
-
+                    
                     <!--<li class="dropdown">
 						<a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
 							<i class="fa fa-envelope"></i> <span class="label label-warning">16</span>

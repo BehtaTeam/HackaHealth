@@ -123,4 +123,13 @@ class UserController extends Controller
 		
 	}
 	
+	public function actionGetPublicData()
+	{
+		$user_id = $_GET['user_id'];
+		
+		$result = UserManage::getPublicData($user_id);
+		
+		Result::success($result);
+	}
+	
 }

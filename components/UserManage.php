@@ -142,4 +142,60 @@ class UserManage
 		return $result;
 	}
 	
+	public static function getPublicData($user_id)
+	{
+		$user = User::findOne(['id' => $user_id]);
+		if (!$user) {
+			Result::runf700();
+		}
+		
+		$result['user']['id']            = $user->id;
+		$result['user']['username']      = $user->username;
+		$result['user']['phone_number']  = $user->phone_number;
+		$result['user']['picture_id']    = $user->picture_id;
+		$result['user']['gender']        = $user->gender;
+		$height_in_meter                 = $user->height / 100;
+		$result['user']['bmi_number']    = $user->weight / ($height_in_meter * $height_in_meter);
+		$bmi_number                      = $result['user']['bmi_number'];
+		
+		if ($bmi_number < 18.5) {
+			$bmi_status = 'کمبود وزن';
+		} elseif ($bmi_number < 24.9) {
+			$bmi_status = 'وزن نرمال';
+		} elseif ($bmi_number < 29.9) {
+			$bmi_status = 'اضافه وزن';
+		} elseif ($bmi_number < 34.9) {
+			$bmi_status = 'چاق';
+		} elseif ($bmi_number < 35) {
+			$bmi_status = 'خیلی چاق';
+		}
+		
+		$result['user']['bmi_status'] = $bmi_status;
+		$result['user']['age']        = $user->age;
+		$result['user']['height']     = $user->height;
+		$result['user']['weight']     = $user->weight;
+		$result['user']['status']     = $user->status;
+		
+		$status = $result['user']['status'];
+		
+		switch ($status) {
+			case 1:
+				$status_string = 'سالم';
+				break;
+			case 2:
+				$status_string = 'دچار بیماری قلبی';
+				break;
+			case 2:
+				$status_string = 'آسیب دیده از بیماری قلبی';
+				break;
+		}
+		
+		$result['user']['status_string']             = $status_string;
+		$result['user']['confidence_number']         = $user->confidence_number;
+		$result['user']['first_name']                = $user->first_name;
+		$result['user']['last_name']                 = $user->last_name;
+		
+		return $result;
+	}
+	
 }

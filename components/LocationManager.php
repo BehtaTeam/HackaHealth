@@ -38,26 +38,26 @@ class LocationManager
 				$legs[] = $leg;
 			}
 			
-			$route_list[] = LocationManager::stepMaker($legs);
+			$route_list[]['legs'] = LocationManager::stepMaker($legs);
 		}
 		
 		foreach ($content2->routes as $route) {
-				$legs = [];
-				foreach ($route->legs as $leg) {
-					$legs[] = $leg;
-				}
-				
-				$route_list[] = LocationManager::stepMaker($legs);
+			$legs = [];
+			foreach ($route->legs as $leg) {
+				$legs[] = $leg;
 			}
 			
-			foreach ($content3->routes as $route) {
-				$legs = [];
-				foreach ($route->legs as $leg) {
-					$legs[] = $leg;
-				}
-				
-				$route_list[] = LocationManager::stepMaker($legs);
+			$route_list[]['legs'] = LocationManager::stepMaker($legs);
+		}
+		
+		foreach ($content3->routes as $route) {
+			$legs = [];
+			foreach ($route->legs as $leg) {
+				$legs[] = $leg;
 			}
+			
+			$route_list[]['legs'] = LocationManager::stepMaker($legs);
+		}
 		
 		$result['routes'] = $route_list;
 		
@@ -96,17 +96,17 @@ class LocationManager
 			$step_groups[$id]['end_location']   = $leg->end_location;
 			
 			if ($average < 51) {
-				$pollute_status = 'مناسب برای همه';
+				$pollute_status = 'سالم';
 			} elseif ($average < 101) {
-				$pollute_status = 'تقریبا مناسب برای همه';
+				$pollute_status = 'تقریبا سالم';
 			} elseif ($average < 151) {
-				$pollute_status = 'هوای ناسالم برای بیماران قلبی';
+				$pollute_status = 'ناسالم برای بیماران قلبی';
 			} elseif ($average < 201) {
-				$pollute_status = 'هوای ناسالم برای عموم';
+				$pollute_status = 'ناسالم';
 			} elseif ($average < 251) {
-				$pollute_status = 'هوای بسیار ناسالم';
+				$pollute_status = 'بسیار ناسالم';
 			} elseif ($average < 301) {
-				$pollute_status = 'هوای خطرناک';
+				$pollute_status = 'خطرناک';
 			}
 			
 			$step_groups[$id]['pollute_status'] = $pollute_status;
@@ -156,17 +156,17 @@ class LocationManager
 			
 			$pollute = $area->pollute;
 			if ($pollute < 51) {
-				$item['pollute_string'] = 'هوای پاک';
+				$item['pollute_string'] = 'سالم';
 			} elseif ($pollute < 101) {
-				$item['pollute_string'] = 'هوای نیمه پاک';
+				$item['pollute_string'] = 'تقریبا سالم';
 			} elseif ($pollute < 151) {
-				$item['pollute_string'] = 'هوای ناسالم برای بیماران قلبی';
+				$item['pollute_string'] = 'ناسالم برای بیماران قلبی';
 			} elseif ($pollute < 201) {
-				$item['pollute_string'] = 'هوای ناسالم برای عموم';
-			} elseif ($pollute < 201) {
-				$item['pollute_string'] = 'هوای بسیار ناسالم';
+				$item['pollute_string'] = 'ناسالم';
 			} elseif ($pollute < 251) {
-				$item['pollute_string'] = 'هوای خطرناک';
+				$item['pollute_string'] = 'بسیار ناسالم';
+			} elseif ($pollute < 301) {
+				$item['pollute_string'] = 'خطرناک';
 			}
 			
 			$list[] = $item;
@@ -213,6 +213,85 @@ class LocationManager
 		$result['helper']['gender']     = $helper->gender;
 		
 		return $result;
+		
+	}
+	
+	public static function getArea($lat, $long)
+	{
+		$area = Area::find()->where('lat1>' . $lat)->andWhere('lat4<' . $lat)->andWhere('long2>' . $long)->andWhere('long1<' . $long)->one();
+		
+		$result['area']['id']      = $area->id;
+		$result['area']['pollute'] = $area->pollute;
+		
+		$pollute = $area->pollute;
+		if ($pollute < 51) {
+			$result['area']['pollute_string'] = 'سالم';
+		} elseif ($pollute < 101) {
+			$result['area']['pollute_string'] = 'تقریبا سالم';
+		} elseif ($pollute < 151) {
+			$result['area']['pollute_string'] = 'ناسالم برای بیماران قلبی';
+		} elseif ($pollute < 201) {
+			$result['area']['pollute_string'] = 'ناسالم';
+		} elseif ($pollute < 251) {
+			$result['area']['pollute_string'] = 'بسیار ناسالم';
+		} elseif ($pollute < 301) {
+			$result['area']['pollute_string'] = 'خطرناک';
+		}
+		
+		return $result;
+	}
+	
+	public static function alertHelpers($lat, $long, $token, $pushe_id, $gaid)
+	{
+		$user = User::findOne(['api_token' => $token]);
+		if (!$user) {
+			Result::r403();
+		}
+		
+		$qstring = "(POW(('center.long'-$long),2) + POW(('center.lat'-$lat),1))";
+		//$center = Center::find()->orderBy($qstring)->one();
+		
+		//$center = Center::findOne(['orderBy' => $qstring]);
+		$center = Center::findBySql('SELECT * FROM `center` ORDER BY ' . $qstring)->one();
+		
+		$result['center']['id']          = $center->id;
+		$result['center']['lat']         = $center->lat;
+		$result['center']['long']        = $center->long;
+		$result['center']['title']       = $center->title;
+		$result['center']['description'] = $center->description;
+		$result['center']['type']        = $center->type;
+		
+		
+		$data = [
+			"app_ids"        => "Hagrid",
+			"filters"        => [
+				'pushe_id' => $pushe_id,
+			],
+			'data'           => [
+				'title'   => 'هشدار نیاز به کمک',
+				'content' => 'کاربری با شماره تماس '
+			],
+			'custom_content' => [
+				'lat'     => $lat,
+				'long'    => $long,
+				'user_id' => $user->id,
+			]
+		];
+		
+		$data_string = json_encode($data);
+		
+		$ch = curl_init('https://api.pushe.co/v2/messaging/notifications/');
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, [
+				'Content-Type: application/json',
+				'authorization: ',
+				'Content-Type: application/json',
+				'Content-Length: ' . strlen($data_string)]
+		);
+		
+		$result = curl_exec($ch);
 		
 	}
 	

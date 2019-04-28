@@ -36,6 +36,17 @@ class LocationController extends Controller
 		Result::success($result);
 	}
 	
+	public function actionGetArea()
+	{
+		
+		$lat  = $_GET['lat'];
+		$long = $_GET['long'];
+		
+		$result = LocationManager::getArea($lat, $long);
+		
+		Result::success($result);
+	}
+	
 	public function actionPopulate()
 	{
 		$first = Area::findOne(['id' => 21]);
@@ -64,7 +75,6 @@ class LocationController extends Controller
 			$area->long4 = $area->long1;
 			$area->save();
 		}
-		
 		
 	}
 	
@@ -109,6 +119,19 @@ class LocationController extends Controller
 			$area->pollute = rand(0, 300);
 			$area->save();
 		}
+	}
+	
+	public function actionAlertHelpers()
+	{
+		$lat      = $_GET['lat'];
+		$long     = $_GET['long'];
+		$token    = $_GET['token'];
+		$pushe_id = $_GET['pushe_id'];
+		$gaid     = $_GET['gaid'];
+		
+		$result = LocationManager::alertHelpers($lat, $long, $token, $pushe_id, $gaid);
+		
+		Result::success($result);
 	}
 	
 }

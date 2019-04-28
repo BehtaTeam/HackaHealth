@@ -134,7 +134,7 @@ class LocationController extends Controller
 	public function actionSetRandoms()
 	{
 		foreach (Area::find()->all() as $area) {
-			$area->pollute = rand(0, 300);
+			$area->pollute = rand(0, 246);
 			$area->save();
 		}
 	}

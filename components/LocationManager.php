@@ -29,9 +29,35 @@ class LocationManager
 		usleep(500);
 		
 		// Other Requests
-		$content2 = LocationManager::googleRequest($start_lat . ',' . $start_long, $end_lat . ',' . $end_long, $start_lat . ',' . ((($end_long - $start_long) / 2) + $start_long));
+		
+		if ($start_lat > $end_lat) {
+			$middle_lat = $start_lat - (($start_lat - $end_lat) / 2);
+		} else {
+			$middle_lat = $end_lat - (($end_lat - $start_lat) / 2);
+		}
+		
+		if ($start_long > $end_long) {
+			$middle_long = $start_long + (($start_long - $end_long) / 3) + 0.03;
+		} else {
+			$middle_long = $start_long - (($end_long - $start_long) / 3) - 0.03;
+		}
+		
+		$content2 = LocationManager::googleRequest($start_lat . ',' . $start_long, $end_lat . ',' . $end_long, $middle_lat . ',' . $middle_long);
+		
+		if ($start_lat > $end_lat) {
+			$middle_lat = $start_lat - (($start_lat - $end_lat) / 3) - 0.01;
+		} else {
+			$middle_lat = $start_lat + (($end_lat - $start_lat) / 3) + 0.01;
+		}
+		
+		if ($start_long > $end_long) {
+			$middle_long = $end_long;
+		} else {
+			$middle_long = $start_long;
+		}
+		
 		usleep(500);
-		$content3 = LocationManager::googleRequest($start_lat . ',' . $start_long, $end_lat . ',' . $end_long, ((($end_lat - $start_lat) / 2) + $start_lat) . ',' . $start_long);
+		$content3 = LocationManager::googleRequest($start_lat . ',' . $start_long, $end_lat . ',' . $end_long, $middle_lat . ',' . $middle_long);
 		
 		$route_list = [];
 		
@@ -133,6 +159,7 @@ class LocationManager
 			'key'         => 'AIzaSyAiVFF15gsPcTaYOv7kS_gYC1xmRzgSCCY',
 			'mode'        => 'Driving',
 			'waypoints'   => $waypoints,
+			'avoid'       => 'traffic'
 		];
 		
 		$str = '';

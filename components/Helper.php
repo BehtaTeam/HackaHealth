@@ -31,15 +31,6 @@ class Helper
 		$user->update();
 	}
 	
-	public static function setLog($user_id, $title)
-	{
-		$log          = new Log();
-		$log->user_id = $user_id;
-		$log->title   = $title;
-		$log->date    = time();
-		$log->save();
-	}
-	
 	public static function intToDay($int)
 	{
 		switch ($int) {

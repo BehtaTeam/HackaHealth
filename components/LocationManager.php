@@ -14,6 +14,9 @@ use app\models\User;
 class LocationManager
 {
 	
+	/*
+	 * Send Healthy Location For Requester
+	 */
 	public static function location($start_lat, $start_long, $end_lat, $end_long)
 	{
 		$start_lat  = (double)$start_lat;
@@ -64,6 +67,9 @@ class LocationManager
 		return $result;
 	}
 	
+	/*
+	 * The Step Optimized Step Maker Part
+	 */
 	public static function stepMaker($legs)
 	{
 		$step_groups = [];
@@ -116,6 +122,9 @@ class LocationManager
 		return $step_groups;
 	}
 	
+	/*
+	 * Google Request Maker
+	 */
 	public static function googleRequest($start, $end, $waypoints)
 	{
 		$options = [
@@ -139,6 +148,9 @@ class LocationManager
 		return json_decode($content);
 	}
 	
+	/*
+	 * Get Areas with their information
+	 */
 	public static function getAreas()
 	{
 		$list = [];
@@ -177,6 +189,9 @@ class LocationManager
 		return $result;
 	}
 	
+	/*
+	 * Get Nearest Hospital or Clinic Center
+	 */
 	public static function nearestCenter($lat, $long, $token)
 	{
 		$qstring = "(POW(('center.long'-$long),2) + POW(('center.lat'-$lat),1))";
@@ -196,6 +211,9 @@ class LocationManager
 		
 	}
 	
+	/*
+	 * Get Nearest Helper fot Helping User
+	 */
 	public static function nearestHelper($lat, $long, $token)
 	{
 		$qstring = "(POW(('helper.long'-$long),2) + POW(('helper.lat'-$lat),1)) DESC";
@@ -216,6 +234,9 @@ class LocationManager
 		
 	}
 	
+	/*
+	 * Show the area id of an specific lat and long
+	 */
 	public static function getArea($lat, $long)
 	{
 		$area = Area::find()->where('lat1>' . $lat)->andWhere('lat4<' . $lat)->andWhere('long2>' . $long)->andWhere('long1<' . $long)->one();
@@ -241,6 +262,9 @@ class LocationManager
 		return $result;
 	}
 	
+	/*
+	 * Alert a helper with notification to help the user
+	 */
 	public static function alertHelpers($lat, $long, $token, $pushe_id, $gaid)
 	{
 		$user = User::findOne(['api_token' => $token]);

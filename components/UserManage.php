@@ -30,6 +30,9 @@ class UserManage
 		
 	}
 	
+	/*
+	 * Get User Private Data with token
+	 */
 	public static function getData($user_id, $token)
 	{
 		$user = User::findOne(['id' => $user_id]);
@@ -98,6 +101,9 @@ class UserManage
 		return $result;
 	}
 	
+	/*
+	 * Set User Heart Rate With timestamp in DB
+	 */
 	public static function setHeartRate($token, $rate)
 	{
 		$user = User::findOne(['api_token' => $token]);
@@ -120,6 +126,9 @@ class UserManage
 		return $result;
 	}
 	
+	/*
+	 * Get History Of User's Heart Rate
+	 */
 	public static function getHeartRate($token, $number)
 	{
 		$user = User::findOne(['api_token' => $token]);
@@ -142,6 +151,9 @@ class UserManage
 		return $result;
 	}
 	
+	/*
+	 * Get A User Public Data For Helper
+	 */
 	public static function getPublicData($user_id)
 	{
 		$user = User::findOne(['id' => $user_id]);

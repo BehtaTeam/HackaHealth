@@ -299,7 +299,7 @@ class LocationManager
 	/*
 	 * Alert a helper with notification to help the user
 	 */
-	public static function alertHelpers($lat, $long, $token, $pushe_id, $gaid)
+	public static function alertHelpers($lat, $long, $token, $pushe_id)
 	{
 		$user = User::findOne(['api_token' => $token]);
 		if (!$user) {
@@ -307,24 +307,18 @@ class LocationManager
 		}
 		
 		$qstring = "(POW(('center.long'-$long),2) + POW(('center.lat'-$lat),1))";
-		//$center = Center::find()->orderBy($qstring)->one();
 		
-		//$center = Center::findOne(['orderBy' => $qstring]);
-		$center = Center::findBySql('SELECT * FROM `center` ORDER BY ' . $qstring)->one();
+		$helper = Helper::findBySql('SELECT * FROM `helper` ORDER BY ' . $qstring)->one();
 		
-		$result['center']['id']          = $center->id;
-		$result['center']['lat']         = $center->lat;
-		$result['center']['long']        = $center->long;
-		$result['center']['title']       = $center->title;
-		$result['center']['description'] = $center->description;
-		$result['center']['type']        = $center->type;
+		$result['helper']['id']         = $helper->id;
+		$result['helper']['lat']        = $helper->lat;
+		$result['helper']['long']       = $helper->long;
+		$result['helper']['first_name'] = $helper->first_name;
+		$result['helper']['last_name']  = $helper->last_name;
 		
 		
 		$data = [
-			"app_ids"        => "Hagrid",
-			"filters"        => [
-				'pushe_id' => $pushe_id,
-			],
+			"app_ids"        => ["com.android.hackahealth"],
 			'data'           => [
 				'title'   => 'هشدار نیاز به کمک',
 				'content' => 'کاربری با شماره تماس '
@@ -344,13 +338,14 @@ class LocationManager
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, [
 				'Content-Type: application/json',
-				'authorization: ',
+				'authorization: Token 3ddfe5c6495de57e9b32ae3a41cd4f40b342ce60',
 				'Content-Type: application/json',
 				'Content-Length: ' . strlen($data_string)]
 		);
 		
 		$result = curl_exec($ch);
 		
+		return $result;
 	}
 	
 }

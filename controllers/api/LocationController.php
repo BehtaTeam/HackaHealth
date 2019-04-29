@@ -6,8 +6,12 @@ use app\components\LocationManager;
 use app\components\MCrypt;
 use app\components\Result;
 use app\components\Secure;
+use app\components\Tools;
 use app\components\UserManage;
 use app\models\Area;
+use app\models\Center;
+use app\models\Helper;
+use app\models\User;
 use Yii;
 use yii\web\Controller;
 
@@ -144,13 +148,11 @@ class LocationController extends Controller
 	 */
 	public function actionAlertHelpers()
 	{
-		$lat      = $_GET['lat'];
-		$long     = $_GET['long'];
-		$token    = $_GET['token'];
-		$pushe_id = $_GET['pushe_id'];
-		$gaid     = $_GET['gaid'];
+		$lat   = $_POST['lat'];
+		$long  = $_POST['long'];
+		$token = $_POST['token'];
 		
-		$result = LocationManager::alertHelpers($lat, $long, $token, $pushe_id, $gaid);
+		$result = LocationManager::alertHelpers($lat, $long, $token);
 		
 		Result::success($result);
 	}

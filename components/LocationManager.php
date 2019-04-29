@@ -228,7 +228,7 @@ class LocationManager
 	 */
 	public static function nearestCenter($lat, $long, $token)
 	{
-		$qstring = "(POW(('center.long'-$long),2) + POW(('center.lat'-$lat),1))";
+		$qstring = "(POW(('center.long -'.$long),2) + POW(('center.lat-'.$lat),2))";
 		//$center = Center::find()->orderBy($qstring)->one();
 		
 		//$center = Center::findOne(['orderBy' => $qstring]);
@@ -250,7 +250,7 @@ class LocationManager
 	 */
 	public static function nearestHelper($lat, $long, $token)
 	{
-		$qstring = "(POW(('helper.long'-$long),2) + POW(('helper.lat'-$lat),1)) DESC";
+		$qstring = "(POW(('helper.long-'.$long),2) + POW(('helper.lat-' .$lat),2)) DESC";
 		//$center = Center::find()->orderBy($qstring)->one();
 		
 		//$center = Center::findOne(['orderBy' => $qstring]);
@@ -299,14 +299,14 @@ class LocationManager
 	/*
 	 * Alert a helper with notification to help the user
 	 */
-	public static function alertHelpers($lat, $long, $token, $pushe_id)
+	public static function alertHelpers($lat, $long, $token)
 	{
-		$user = User::findOne(['api_token' => $token]);
+		$user = User::findOne(['id' => 1]);
 		if (!$user) {
 			Result::r403();
 		}
 		
-		$qstring = "(POW(('center.long'-$long),2) + POW(('center.lat'-$lat),1))";
+		$qstring = "(POW((helper.long-" . $long . "),2) + POW((helper.lat-" . $lat . "),2))";
 		
 		$helper = Helper::findBySql('SELECT * FROM `helper` ORDER BY ' . $qstring)->one();
 		
@@ -344,8 +344,10 @@ class LocationManager
 		);
 		
 		$result = curl_exec($ch);
+
+		$res['success'] = 1;
 		
-		return $result;
+		return $res;
 	}
 	
 }

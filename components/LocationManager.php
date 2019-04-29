@@ -321,7 +321,7 @@ class LocationManager
 			"app_ids"        => ["com.android.hackahealth"],
 			'data'           => [
 				'title'   => 'هشدار نیاز به کمک',
-				'content' => 'کاربری با شماره تماس '
+				'content' => "کاربری با شماره تماس " . $user->phone_number . " دچار مشکل قلبی شده است لطفا پیگیری کنید."
 			],
 			'custom_content' => [
 				'lat'     => $lat,
